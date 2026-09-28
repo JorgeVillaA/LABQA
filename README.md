@@ -1,4 +1,4 @@
-# QA Inventory Lab
+# Inventory Lab
 
 Laboratorio pequeño en **Node + Express + SQLite** para pruebas QA manuales.
 Todo error funcional, visual o de idioma es **intencional**. No abras issues por bugs de la app.
