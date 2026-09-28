@@ -1,0 +1,31 @@
+{
+  "users": [
+    { "username": "admin", "password": "admin123", "role": "admin" },
+    { "username": "vendedor", "password": "venta123", "role": "vendedor" }
+  ],
+  "products": [
+    { "name": "Laptop HP 15", "category": "Electrónica", "stock": 12, "price": 749.99, "date": "2026-01-15" },
+    { "name": "Mouse Logitech M185", "category": "Electrónica", "stock": 50, "price": 12.5, "date": "2026-02-01" },
+    { "name": "Teclado Mecánico RGB", "category": "Electrónica", "stock": 30, "price": 45.99, "date": "2026-02-10" },
+    { "name": "Monitor 24 Samsung", "category": "Electrónica", "stock": 8, "price": 129.0, "date": "2026-03-05" },
+    { "name": "Camiseta Negra Talla M", "category": "Ropa", "stock": 100, "price": 9.99, "date": "2026-01-20" },
+    { "name": "Jeans Azul Slim", "category": "Ropa", "stock": 40, "price": 29.95, "date": "2026-02-18" },
+    { "name": "Zapatillas Running", "category": "Ropa", "stock": 25, "price": 59.9, "date": "2026-03-01" },
+    { "name": "Gorra Roja", "category": "Ropa", "stock": 0, "price": 7.5, "date": "2026-03-12" },
+    { "name": "Café Molido 500g", "category": "Alimentos", "stock": 200, "price": 4.75, "date": "2026-01-10" },
+    { "name": "Azúcar 1kg", "category": "Alimentos", "stock": 150, "price": 1.2, "date": "2026-01-11" },
+    { "name": "Aceite de Oliva 1L", "category": "Alimentos", "stock": 60, "price": 8.3, "date": "2026-02-22" },
+    { "name": "Arroz 5kg", "category": "Alimentos", "stock": 90, "price": 6.1, "date": "2026-03-03" },
+    { "name": "Silla de Oficina", "category": "Hogar", "stock": 15, "price": 89.99, "date": "2026-02-05" },
+    { "name": "Lámpara LED Escritorio", "category": "Hogar", "stock": 35, "price": 19.99, "date": "2026-02-28" },
+    { "name": "Set Ollas x5", "category": "Hogar", "stock": 10, "price": 79.5, "date": "2026-03-08" },
+    { "name": "Aspiradora Robot", "category": "Hogar", "stock": 5, "price": 199.0, "date": "2026-03-15" },
+    { "name": "Balón de Fútbol", "category": "Deportes", "stock": 22, "price": 14.99, "date": "2026-01-25" },
+    { "name": "Mancuernas 10kg", "category": "Deportes", "stock": 18, "price": 34.5, "date": "2026-02-14" },
+    { "name": "Bicicleta Montañera", "category": "Deportes", "stock": 3, "price": 299.99, "date": "2026-03-10" },
+    { "name": "Guantes Gym", "category": "Deportes", "stock": 1, "price": 11.1, "date": "2026-03-18" },
+    { "name": "Producto borde decimal", "category": "Electrónica", "stock": 3, "price": 0.1, "date": "2026-03-20" },
+    { "name": "Producto borde decimal 2", "category": "Electrónica", "stock": 3, "price": 0.2, "date": "2026-03-21" },
+    { "name": "Stock Cero Test", "category": "Hogar", "stock": 0, "price": 49.99, "date": "2026-03-22" }
+  ]
+}

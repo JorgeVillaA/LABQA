@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Inventario QA Lab</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="particles"></canvas>
+  <span class="doodle" style="top:14%;left:4%;font-size:30px">✿</span>
+  <span class="doodle" style="bottom:16%;right:5%;font-size:30px;animation-delay:1.5s">★</span>
+
+  <div class="layout">
+    <aside class="sidebar win">
+      <div class="win-bar"><span>QA·Lab</span><span class="win-dots"><i></i><b>_</b><i class="x"></i></span></div>
+      <nav class="nav">
+        <p class="nav-title">Principal</p>
+        <button class="nav-item active" data-mod="Inicio"><i>⌂</i>Inicio</button>
+        <button class="nav-item" data-mod="Inventario"><i>▦</i>Inventario</button>
+        <p class="nav-title">Operación</p>
+        <button class="nav-item" data-mod="Ingresos"><i>◉</i>Ingresos</button>
+        <button class="nav-item" data-mod="Gastos"><i>◍</i>Gastos</button>
+        <button class="nav-item" data-mod="Contactos"><i>◐</i>Contactos</button>
+        <button class="nav-item" data-mod="Bancos"><i>▤</i>Bancos</button>
+        <button class="nav-item" data-mod="POS"><i>◈</i>POS</button>
+        <p class="nav-title">Sistema</p>
+        <button class="nav-item" data-mod="Contabilidad"><i>◔</i>Contabilidad</button>
+        <button class="nav-item" data-mod="Reportes"><i>◑</i>Reportes</button>
+        <button class="nav-item" data-mod="Configuración"><i>⚙</i>Configuración</button>
+        <p class="nav-title">Descubre más soluciones</p>
+        <button class="nav-item" data-mod="Nómina"><i>✓</i>Nómina</button>
+        <button class="nav-item" data-mod="Portal de clientes"><i>❖</i>Portal de clientes</button>
+      </nav>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="win-bar">
+          <h1>Dashboard de Inventario</h1>
+          <span class="win-dots"><i></i><b>_</b><i class="x"></i></span>
+        </div>
+        <div class="topbar-user">
+          <span id="userLabel"></span>
+          <!-- BUG-QA-i18n: mezcla de idiomas intencional -->
+          <button id="btnLogout">Logout</button>
+        </div>
+      </header>
+
+      <main class="container">
+        <!-- VISTA: INICIO -->
+        <div data-view="home">
+          <section class="kpis">
+            <div class="kpi"><p class="kpi-label">Valor inventario</p><p class="kpi-val" id="kpiValue">-</p></div>
+            <div class="kpi"><p class="kpi-label">Unidades en stock</p><p class="kpi-val" id="kpiUnits">-</p></div>
+            <div class="kpi"><p class="kpi-label">Productos</p><p class="kpi-val" id="kpiProducts">-</p></div>
+            <div class="kpi"><p class="kpi-label">Stock bajo (&lt; 5)</p><p class="kpi-val" id="kpiLow">-</p></div>
+            <div class="kpi"><p class="kpi-label">Categorías</p><p class="kpi-val" id="kpiCats">-</p></div>
+          </section>
+
+          <section class="card chart-card">
+            <div class="mini-bar">movimiento_mensual.png</div>
+            <div class="chart-head">
+              <h3>Entradas de inventario</h3>
+              <div class="chart-controls">
+                <select id="rangeSelect">
+                  <option value="3">3 meses</option>
+                  <option value="6" selected>6 meses</option>
+                  <option value="12">12 meses</option>
+                </select>
+                <div class="seg">
+                  <button id="toggleValor" class="on">Valor</button>
+                  <button id="toggleUnidades">Unidades</button>
+                </div>
+                <button id="btnRefreshLine" class="icon-btn" title="Actualizar">⟳</button>
+              </div>
+            </div>
+            <canvas id="lineChart" width="900" height="240"></canvas>
+            <div class="chart-legend"><span><span class="dot" style="background:#00B19D"></span>Valor</span><span><span class="dot" style="background:#9AA3AD"></span>Unidades</span></div>
+          </section>
+
+          <section class="charts-row">
+            <div class="card chart-card">
+              <div class="mini-bar">stock_por_mes.png</div>
+              <div class="chart-head">
+                <h3>Stock por mes y precio</h3>
+                <button id="btnRefreshStack" class="icon-btn" title="Actualizar">⟳</button>
+              </div>
+              <canvas id="stackChart" width="600" height="240"></canvas>
+              <div class="chart-legend" id="stackLegend"></div>
+            </div>
+            <div class="card chart-card">
+              <div class="mini-bar">top_productos.png</div>
+              <div class="chart-head">
+                <h3>Top productos</h3>
+                <div class="chart-controls">
+                  <select id="donutCat"><option value="">Todas</option></select>
+                  <button id="btnRefreshDonut" class="icon-btn" title="Actualizar">⟳</button>
+                </div>
+              </div>
+              <div class="seg" id="donutTabs">
+                <button data-k="value" class="on">Por valor</button>
+                <button data-k="stock">Por stock</button>
+              </div>
+              <canvas id="donutChart" width="400" height="220"></canvas>
+              <div class="chart-legend col" id="donutLegend"></div>
+            </div>
+          </section>
+
+          <section class="cards">
+            <div class="card tilt"><div class="mini-bar">● ○ ✕</div><h3>Total productos</h3><p id="statTotal">-</p><small>unidades distintas</small></div>
+            <!-- BUG-QA: el título mezcla idioma -->
+            <div class="card tilt"><div class="mini-bar">● ○ ✕</div><h3>Valor total (Stock value)</h3><p id="statValue">-</p><small>precio × stock</small></div>
+            <div class="card tilt"><div class="mini-bar">● ○ ✕</div><h3>Stock bajo (&lt; 5)</h3><p id="statLow">-</p><small>requieren reposición</small></div>
+          </section>
+
+          <section class="card chart-card">
+            <div class="mini-bar">stock_por_categoria.png</div>
+            <h3 style="margin:8px 12px 0">Stock por categoría</h3>
+            <canvas id="chart" width="900" height="220"></canvas>
+            <div class="chart-legend" id="chartLegend"></div>
+          </section>
+        </div>
+
+        <!-- VISTA: INVENTARIO -->
+        <div data-view="inventario" hidden>
+          <section class="card table-card" id="inventario">
+            <div class="mini-bar">inventario.db</div>
+            <div class="table-pad">
+              <section class="toolbar">
+                <!-- BUG-QA-i18n: mezcla intencional Search / Save -->
+                <input id="search" type="text" placeholder="Search producto...">
+                <select id="filterCat">
+                  <option value="">Todas las categorías</option>
+                  <option value="Electrónica">Electrónica</option>
+                  <option value="Ropa">Ropa</option>
+                  <option value="Alimentos">Alimentos</option>
+                  <option value="Hogar">Hogar</option>
+                  <option value="Deportes">Deportes</option>
+                </select>
+                <button id="btnSort">Ordenar por precio</button>
+                <button id="btnAdd">Agregar producto</button>
+                <!-- BUG-QA-i18n -->
+                <button id="btnSave">Save</button>
+              </section>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th><th>Nombre</th><th>Categoría</th><th>Stock</th>
+                      <th>Precio</th><th>Fecha ingreso</th><th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody"></tbody>
+                </table>
+              </div>
+              <p id="pageInfo"></p>
+              <div class="pager">
+                <button id="btnPrev">Anterior</button>
+                <button id="btnNext">Siguiente</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- VISTA: INGRESOS -->
+        <div data-view="ingresos" hidden>
+          <section class="card table-card">
+            <div class="mini-bar">ingresos_mensuales.csv</div>
+            <div class="table-pad">
+              <h3 style="margin:0 0 8px">Entradas por mes (precio × stock según fecha de ingreso)</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Mes</th><th>Unidades</th><th>Valor</th></tr></thead>
+                  <tbody id="ingBody"></tbody>
+                  <tfoot><tr><td><b>Total</b></td><td id="ingTotalU"><b>-</b></td><td id="ingTotalV"><b>-</b></td></tr></tfoot>
+                </table>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- VISTA: REPORTES -->
+        <div data-view="reportes" hidden>
+          <section class="card table-card">
+            <div class="mini-bar">centro_de_reportes</div>
+            <div class="table-pad">
+              <h3 style="margin:0 0 4px">Exportar inventario</h3>
+              <p class="muted-text">Descarga una foto del inventario actual con <b id="repCount">-</b> productos.</p>
+              <div class="btn-row">
+                <button id="btnCSV" class="btn-light">Descargar CSV</button>
+                <button id="btnJSON" class="btn-light">Descargar JSON</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- VISTA: POS -->
+        <div data-view="pos" hidden>
+          <section class="card table-card">
+            <div class="mini-bar">punto_de_venta</div>
+            <div class="table-pad pos-grid">
+              <label>Producto
+                <select id="posProduct"></select>
+              </label>
+              <label>Cantidad
+                <input id="posQty" type="number" value="1">
+              </label>
+              <p class="pos-total">Total: <b id="posTotal">-</b></p>
+              <div class="btn-row">
+                <button id="btnSell" class="btn-light">Cobrar / Vender</button>
+              </div>
+              <p id="posMsg" class="muted-text"></p>
+            </div>
+          </section>
+        </div>
+
+        <!-- VISTA: CONFIGURACIÓN -->
+        <div data-view="config" hidden>
+          <section class="card table-card">
+            <div class="mini-bar">preferencias</div>
+            <div class="table-pad settings">
+              <label>Productos por página
+                <select id="perPageSel">
+                  <option value="5">5</option>
+                  <option value="10" selected>10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                </select>
+              </label>
+              <div class="btn-row">
+                <button id="btnReset" class="btn-danger">Restablecer datos del laboratorio</button>
+              </div>
+              <p class="muted-text">Vuelve al seed inicial (23 productos, 2 usuarios).</p>
+            </div>
+          </section>
+        </div>
+
+        <!-- VISTA: MÓDULO VACÍO -->
+        <div data-view="empty" hidden>
+          <section class="card table-card empty-state">
+            <div class="empty-icon">▦</div>
+            <h3 id="emptyTitle">Módulo</h3>
+            <p class="muted-text" id="emptyDesc">Sin datos en este entorno de laboratorio.</p>
+            <div class="btn-row">
+              <button id="btnBackHome" class="btn-light">Volver al Inicio</button>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-box">
+      <div class="win-bar"><span id="modalTitle">Agregar producto</span><span class="win-dots"><i></i><i class="x"></i></span></div>
+      <div class="body">
+        <label>Nombre <input id="fName" type="text"></label>
+        <label>Categoría
+          <select id="fCat">
+            <option>Electrónica</option><option>Ropa</option><option>Alimentos</option>
+            <option>Hogar</option><option>Deportes</option><option>General</option>
+          </select>
+        </label>
+        <!-- BUG-QA-06: sin min="0", acepta negativos desde la UI -->
+        <label>Stock <input id="fStock" type="number" value="10"></label>
+        <label>Precio <input id="fPrice" type="number" step="0.01" value="9.99"></label>
+        <label>Fecha <input id="fDate" type="date" value="2026-03-01"></label>
+        <div class="modal-actions">
+          <button id="btnCancel">Cancelar</button>
+          <button id="btnConfirm">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

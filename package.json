@@ -1,0 +1,17 @@
+{
+  "name": "qa-inventory-lab",
+  "version": "1.0.0",
+  "description": "Laboratorio QA: sistema de inventarios web con bugs intencionales",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "init-db": "node -e \"require('./db.js').initDb(true)\"",
+    "reset-db": "rm -f inventory.db && node -e \"require('./db.js').initDb(true)\" && echo DB reseteada"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  }
+}
