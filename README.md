@@ -1,4 +1,4 @@
-# QA Inventory Lab — Sistema de Inventarios con bugs para practicar QA
+# QA Inventory Lab
 
 Laboratorio pequeño en **Node + Express + SQLite** para pruebas QA manuales.
 Todo error funcional, visual o de idioma es **intencional**. No abras issues por bugs de la app.
@@ -79,4 +79,3 @@ Ambiente: OS + navegador + http://localhost:3000
 - El "token" de login es simulado y no protege nada a propósito.
 - Si el puerto 3000 está ocupado: `PORT=4000 npm start`.
 
-¡A romperlo! 🔍
